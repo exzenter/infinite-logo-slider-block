@@ -1,5 +1,5 @@
 import { registerBlockType } from '@wordpress/blocks';
-import { InspectorControls, MediaUpload, MediaUploadCheck, RichText, BlockControls, PanelColorSettings } from '@wordpress/block-editor';
+import { InspectorControls, MediaUpload, MediaUploadCheck, RichText, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, RangeControl, ToggleControl, Button, Placeholder, Modal, TextareaControl, ColorPicker, ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
@@ -26,7 +26,10 @@ registerBlockType(metadata.name, {
 			grayscaleOpacity,
 			forceTrueGap,
 			slowdownOnHover,
-			slowdownRatio
+			slowdownRatio,
+			showFade,
+			fadeWidth,
+			reverseDirection
 		} = attributes;
 
 		// State for SVG paste modal and expandable logo controls
@@ -34,6 +37,10 @@ registerBlockType(metadata.name, {
 		const [svgCode, setSvgCode] = useState('');
 		const [expandedLogo, setExpandedLogo] = useState(null);
 		const [isLivePreview, setIsLivePreview] = useState(false);
+
+		const blockProps = useBlockProps({
+			className: 'infinite-logo-slider-wrapper'
+		});
 
 		const addLogo = (media) => {
 			const newLogos = [...logos, {
@@ -126,7 +133,9 @@ registerBlockType(metadata.name, {
 			'--animation-speed': `${animationSpeed}s`,
 			'--logo-height': `${logoHeight}px`,
 			'--logo-gap': `${logoGap}px`,
-			'--grayscale-opacity': grayscaleOpacity
+			'--grayscale-opacity': grayscaleOpacity,
+			'--fade-width': showFade ? `${fadeWidth}px` : '0px',
+			'--fade-color': backgroundColor || '#ffffff'
 		};
 
 		const containerStyle = {
@@ -138,7 +147,8 @@ registerBlockType(metadata.name, {
 			'logo-slider',
 			pauseOnHover && !slowdownOnHover && 'pause-on-hover', // Only pause if slowdown is NOT enabled
 			slowdownOnHover && 'has-slowdown-hover',
-			forceTrueGap && 'force-true-gap'
+			forceTrueGap && 'force-true-gap',
+			reverseDirection && 'reverse'
 		].filter(Boolean).join(' ');
 
 		return (
@@ -176,6 +186,12 @@ registerBlockType(metadata.name, {
 							min={10}
 							max={300}
 							step={5}
+						/>
+						<ToggleControl
+							label={__('Reverse Direction', 'infinite-logo-slider')}
+							checked={reverseDirection}
+							onChange={(value) => setAttributes({ reverseDirection: value })}
+							help={__('Animate logos from left to right', 'infinite-logo-slider')}
 						/>
 						<ToggleControl
 							label={__('Pause on Hover', 'infinite-logo-slider')}
@@ -250,6 +266,24 @@ registerBlockType(metadata.name, {
 						/>
 					</PanelBody>
 
+					<PanelBody title={__('Fade Settings', 'infinite-logo-slider')}>
+						<ToggleControl
+							label={__('Show Edges Fade', 'infinite-logo-slider')}
+							checked={showFade}
+							onChange={(value) => setAttributes({ showFade: value })}
+						/>
+						{showFade && (
+							<RangeControl
+								label={__('Fade Width (px)', 'infinite-logo-slider')}
+								value={fadeWidth}
+								onChange={(value) => setAttributes({ fadeWidth: value })}
+								min={0}
+								max={300}
+								step={10}
+							/>
+						)}
+					</PanelBody>
+
 					<PanelBody title={__('Container Settings', 'infinite-logo-slider')} initialOpen={false}>
 						<ToggleControl
 							label={__('Enable Shadow', 'infinite-logo-slider')}
@@ -278,7 +312,7 @@ registerBlockType(metadata.name, {
 					</PanelBody>
 				</InspectorControls>
 
-				<div className="infinite-logo-slider-wrapper">
+				<div {...blockProps}>
 					{showTitle && (
 						<RichText
 							tagName="h2"
@@ -559,7 +593,10 @@ registerBlockType(metadata.name, {
 			grayscaleOpacity,
 			forceTrueGap,
 			slowdownOnHover,
-			slowdownRatio
+			slowdownRatio,
+			showFade,
+			fadeWidth,
+			reverseDirection
 		} = attributes;
 
 		if (logos.length === 0) {
@@ -578,7 +615,9 @@ registerBlockType(metadata.name, {
 			'--animation-speed': `${animationSpeed}s`,
 			'--logo-height': `${logoHeight}px`,
 			'--logo-gap': `${logoGap}px`,
-			'--grayscale-opacity': grayscaleOpacity
+			'--grayscale-opacity': grayscaleOpacity,
+			'--fade-width': showFade ? `${fadeWidth}px` : '0px',
+			'--fade-color': backgroundColor || '#ffffff'
 		};
 
 		const containerStyle = {
@@ -590,11 +629,16 @@ registerBlockType(metadata.name, {
 			'logo-slider',
 			pauseOnHover && !slowdownOnHover && 'pause-on-hover', // Only pause if slowdown is NOT enabled
 			slowdownOnHover && 'has-slowdown-hover',
-			forceTrueGap && 'force-true-gap'
+			forceTrueGap && 'force-true-gap',
+			reverseDirection && 'reverse'
 		].filter(Boolean).join(' ');
 
+		const blockProps = useBlockProps.save({
+			className: 'infinite-logo-slider-wrapper'
+		});
+
 		return (
-			<div className="infinite-logo-slider-wrapper">
+			<div {...blockProps}>
 				{showTitle && title && (
 					<RichText.Content tagName="h2" className="infinite-logo-slider-title" value={title} />
 				)}

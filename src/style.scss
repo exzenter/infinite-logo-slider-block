@@ -1,5 +1,5 @@
 .infinite-logo-slider-wrapper {
-	padding: 60px 0;
+	padding: 0;
 }
 
 .infinite-logo-slider-title {
@@ -20,7 +20,7 @@
 .logo-container {
 	overflow: hidden;
 	background: white;
-	padding: 40px 0;
+	padding: 0;
 	position: relative;
 }
 
@@ -29,7 +29,7 @@
 	content: '';
 	position: absolute;
 	top: 0;
-	width: 100px;
+	width: var(--fade-width, 100px);
 	height: 100%;
 	z-index: 2;
 	pointer-events: none;
@@ -37,18 +37,22 @@
 
 .logo-container::before {
 	left: 0;
-	background: linear-gradient(to right, white, transparent);
+	background: linear-gradient(to right, var(--fade-color, white), transparent);
 }
 
 .logo-container::after {
 	right: 0;
-	background: linear-gradient(to left, white, transparent);
+	background: linear-gradient(to left, var(--fade-color, white), transparent);
 }
 
 .logo-slider {
 	display: flex;
 	animation: scroll var(--animation-speed, 30s) linear infinite;
 	width: fit-content;
+}
+
+.logo-slider.reverse {
+	animation-direction: reverse;
 }
 
 .logo-slider.pause-on-hover:hover {
