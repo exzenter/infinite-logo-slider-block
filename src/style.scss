@@ -1,0 +1,142 @@
+.infinite-logo-slider-wrapper {
+	padding: 60px 0;
+}
+
+.infinite-logo-slider-title {
+	text-align: center;
+	margin-bottom: 20px;
+	color: #333;
+	font-size: 32px;
+	font-weight: 600;
+}
+
+.infinite-logo-slider-subtitle {
+	text-align: center;
+	color: #666;
+	margin-bottom: 40px;
+	font-size: 16px;
+}
+
+.logo-container {
+	overflow: hidden;
+	background: white;
+	padding: 40px 0;
+	position: relative;
+}
+
+.logo-container::before,
+.logo-container::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	width: 100px;
+	height: 100%;
+	z-index: 2;
+	pointer-events: none;
+}
+
+.logo-container::before {
+	left: 0;
+	background: linear-gradient(to right, white, transparent);
+}
+
+.logo-container::after {
+	right: 0;
+	background: linear-gradient(to left, white, transparent);
+}
+
+.logo-slider {
+	display: flex;
+	animation: scroll var(--animation-speed, 30s) linear infinite;
+	width: fit-content;
+}
+
+.logo-slider.pause-on-hover:hover {
+	animation-play-state: paused;
+}
+
+.logo-slide {
+	display: flex;
+	align-items: center;
+	gap: var(--logo-gap, 80px);
+	padding: 0 40px;
+}
+
+.logo-slider.force-true-gap .logo-item {
+	min-width: auto;
+	flex-shrink: 0;
+}
+
+.logo-slider.force-true-gap .logo-item img {
+	max-width: none;
+	width: auto;
+}
+
+.logo-item {
+	height: var(--logo-height, 60px);
+	min-width: 150px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.logo-item.grayscale {
+	filter: grayscale(100%) opacity(var(--grayscale-opacity, 0.6));
+}
+
+.logo-item.grayscale:hover {
+	filter: grayscale(0%) opacity(1);
+}
+
+.logo-item.inverted {
+	filter: invert(1);
+}
+
+.logo-item.grayscale.inverted {
+	filter: grayscale(100%) opacity(var(--grayscale-opacity, 0.6)) invert(1);
+}
+
+.logo-item.grayscale.inverted:hover {
+	filter: grayscale(0%) opacity(1) invert(1);
+}
+
+.logo-item img {
+	max-height: 100%;
+	max-width: 100%;
+	object-fit: contain;
+}
+
+@keyframes scroll {
+	0% {
+		transform: translateX(0);
+	}
+
+	100% {
+		transform: translateX(-50%);
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.infinite-logo-slider-title {
+		font-size: 24px;
+	}
+
+	.infinite-logo-slider-subtitle {
+		font-size: 14px;
+	}
+
+	.logo-container {
+		padding: 30px 0;
+	}
+
+	.logo-slide {
+		gap: 40px;
+		padding: 0 20px;
+	}
+
+	.logo-item {
+		min-width: 100px;
+	}
+}

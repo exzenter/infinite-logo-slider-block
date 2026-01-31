@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build files
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# npm
+npm-debug.log*
+package-lock.json
+yarn.lock
+
+# WordPress
+*.log

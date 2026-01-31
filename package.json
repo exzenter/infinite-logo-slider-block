@@ -1,0 +1,22 @@
+{
+  "name": "infinite-logo-slider",
+  "version": "1.0.0",
+  "description": "Infinite logo slider Gutenberg block",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "packages-update": "wp-scripts packages-update"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^27.0.0"
+  },
+  "keywords": [
+    "gutenberg",
+    "block",
+    "logo",
+    "slider"
+  ]
+}

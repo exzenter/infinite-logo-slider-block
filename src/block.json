@@ -1,0 +1,99 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "infinite-logo-slider/logo-slider",
+  "version": "1.0.0",
+  "title": "Infinite Logo Slider",
+  "category": "media",
+  "icon": "images-alt2",
+  "description": "Display client logos in an infinite looping carousel",
+  "keywords": [
+    "logo",
+    "slider",
+    "carousel",
+    "clients",
+    "infinite"
+  ],
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "attributes": {
+    "logos": {
+      "type": "array",
+      "default": []
+    },
+    "title": {
+      "type": "string",
+      "default": "Trusted by Leading Companies"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "Join thousands of satisfied clients worldwide"
+    },
+    "showTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "showSubtitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "animationSpeed": {
+      "type": "number",
+      "default": 30
+    },
+    "logoHeight": {
+      "type": "number",
+      "default": 60
+    },
+    "logoGap": {
+      "type": "number",
+      "default": 80
+    },
+    "grayscale": {
+      "type": "boolean",
+      "default": true
+    },
+    "pauseOnHover": {
+      "type": "boolean",
+      "default": true
+    },
+    "enableShadow": {
+      "type": "boolean",
+      "default": false
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "backgroundOpacity": {
+      "type": "number",
+      "default": 1
+    },
+    "grayscaleOpacity": {
+      "type": "number",
+      "default": 1
+    },
+    "forceTrueGap": {
+      "type": "boolean",
+      "default": false
+    },
+    "slowdownOnHover": {
+      "type": "boolean",
+      "default": false
+    },
+    "slowdownRatio": {
+      "type": "number",
+      "default": 0.5
+    }
+  },
+  "textdomain": "infinite-logo-slider",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}
