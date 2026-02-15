@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, MediaUpload, MediaUploadCheck, RichText, BlockControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, RangeControl, ToggleControl, Button, Placeholder, Modal, TextareaControl, ColorPicker, ToolbarGroup, ToolbarButton } from '@wordpress/components';
+import { PanelBody, RangeControl, ToggleControl, Button, Placeholder, Modal, TextareaControl, TextControl, ColorPicker, ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import './editor.scss';
@@ -47,7 +47,9 @@ registerBlockType(metadata.name, {
 				id: media.id,
 				url: media.url,
 				alt: media.alt || '',
+				width: media.width || null, // original width
 				height: null, // per-logo height override
+				originalHeight: media.height || null, // original height for aspect ratio
 				gap: null, // per-logo gap override
 				invert: false // color inversion
 			}];
@@ -109,7 +111,9 @@ registerBlockType(metadata.name, {
 					height: null,
 					gap: null,
 					invert: false,
-					isSvg: true
+					isSvg: true,
+				width: null,
+				originalHeight: null
 				};
 
 				setAttributes({ logos: [...logos, newLogo] });
@@ -127,6 +131,16 @@ registerBlockType(metadata.name, {
 			const g = parseInt(hex.slice(3, 5), 16);
 			const b = parseInt(hex.slice(5, 7), 16);
 			return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+		};
+
+		// Helper to calculate display dimensions for images
+		const getLogoDimensions = (logo, displayHeight) => {
+			if (!logo.width || !logo.originalHeight) {
+				return { width: undefined, height: displayHeight };
+			}
+			const aspectRatio = logo.width / logo.originalHeight;
+			const width = Math.round(displayHeight * aspectRatio);
+			return { width, height: displayHeight };
 		};
 
 		const sliderStyle = {
@@ -360,7 +374,14 @@ registerBlockType(metadata.name, {
 
 										return (
 											<div key={logo.id} className={logoClasses} style={combinedStyle}>
-												<img src={logo.url} alt={logo.alt} />
+												<img
+											src={logo.url}
+											alt={logo.alt}
+											{...(() => {
+												const dims = getLogoDimensions(logo, logo.height || logoHeight);
+												return dims.width ? { width: dims.width, height: dims.height } : { height: dims.height };
+											})()}
+										/>
 											</div>
 										);
 									})}
@@ -385,7 +406,14 @@ registerBlockType(metadata.name, {
 
 										return (
 											<div key={`${logo.id}-duplicate`} className={logoClasses} style={combinedStyle}>
-												<img src={logo.url} alt={logo.alt} />
+												<img
+											src={logo.url}
+											alt={logo.alt}
+											{...(() => {
+												const dims = getLogoDimensions(logo, logo.height || logoHeight);
+												return dims.width ? { width: dims.width, height: dims.height } : { height: dims.height };
+											})()}
+										/>
 											</div>
 										);
 									})}
@@ -471,6 +499,13 @@ registerBlockType(metadata.name, {
 
 													{isExpanded && (
 														<div className="logo-settings-panel">
+															<TextControl
+																label={__('Alt Text', 'infinite-logo-slider')}
+																value={logo.alt || ''}
+																onChange={(value) => updateLogoAlt(index, value)}
+																placeholder={__('Describe this logo...', 'infinite-logo-slider')}
+																help={__('Alternative text for accessibility', 'infinite-logo-slider')}
+															/>
 															<RangeControl
 																label={__('Height Override (px)', 'infinite-logo-slider')}
 																value={logo.height || logoHeight}
@@ -611,6 +646,16 @@ registerBlockType(metadata.name, {
 			return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 		};
 
+		// Helper to calculate display dimensions for images
+		const getLogoDimensions = (logo, displayHeight) => {
+			if (!logo.width || !logo.originalHeight) {
+				return { width: undefined, height: displayHeight };
+			}
+			const aspectRatio = logo.width / logo.originalHeight;
+			const width = Math.round(displayHeight * aspectRatio);
+			return { width, height: displayHeight };
+		};
+
 		const sliderStyle = {
 			'--animation-speed': `${animationSpeed}s`,
 			'--logo-height': `${logoHeight}px`,
@@ -673,7 +718,14 @@ registerBlockType(metadata.name, {
 
 								return (
 									<div key={logo.id} className={logoClasses} style={combinedStyle}>
-										<img src={logo.url} alt={logo.alt} />
+										<img
+											src={logo.url}
+											alt={logo.alt}
+											{...(() => {
+												const dims = getLogoDimensions(logo, logo.height || logoHeight);
+												return dims.width ? { width: dims.width, height: dims.height } : { height: dims.height };
+											})()}
+										/>
 									</div>
 								);
 							})}
@@ -698,7 +750,14 @@ registerBlockType(metadata.name, {
 
 								return (
 									<div key={`${logo.id}-duplicate`} className={logoClasses} style={combinedStyle}>
-										<img src={logo.url} alt={logo.alt} />
+										<img
+											src={logo.url}
+											alt={logo.alt}
+											{...(() => {
+												const dims = getLogoDimensions(logo, logo.height || logoHeight);
+												return dims.width ? { width: dims.width, height: dims.height } : { height: dims.height };
+											})()}
+										/>
 									</div>
 								);
 							})}
